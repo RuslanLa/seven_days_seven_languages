@@ -1,0 +1,1 @@
+f = File.open("file.txt", "w") {|f| f.write "some string"}
