@@ -1,28 +1,3 @@
-#Task1. Fibonacci numbers implementation with recursion
-fib := method(n,
-    if(n <= 2, 1, 
-       fib(n-1)+fib(n-2)
-    )
-)
-fib(1) println
-fib(4) println
-
-#Fibonacci numbers implementation with loop
-fibLoop := method(n,
-  number := 1
-  numberBefore := 1
-  for(i, 3, n, 
-    numberCopy := number
-    number := numberBefore + number
-    numberBefore := numberCopy
-  )
-  number
-)
-
-fibLoop(1) println
-fibLoop(4) println
-fibLoop(20) println
-
 #Redefine / operator  to return 0 if the denominator is 0
 prevDivision := Number getSlot("/")
 Number / := method(i, if(i==0, 0, prevDivision(i)))
@@ -70,11 +45,32 @@ TwoDimensionalList transpose := method(
     transposed map(i, row, row map(j, _, get(j, i)))
 )
 
-twodList := TwoDimensionalList dim(5, 10)
-twodList set(4, 3, 5)
-twodList get(4, 3) println
-twodList println
-"transpose" println
-twodList transpose println
+# write the matrix to a file, and read it back
+TwoDimensionalList write := method(fileName,
+  file := File with (fileName)
+  file remove
+  file openForUpdating
+  listContent := serialized
+  file write(listContent)
+  file close
+)
 
-#f := File with("two2List.txt")
+TwoDimensionalList read := method(fileName,
+  listFromFile := doFile(fileName)
+  resultList := dim(listFromFile size, listFromFile at(0) size)
+  listFromFile foreach(i, row, row foreach(j, value, resultList set(i, j, value)))
+  listFromFile
+)
+
+exampleList := TwoDimensionalList dim(5, 10)
+exampleList set(4, 3, 5)
+exampleList get(4, 3) println
+exampleList println
+"transpose" println
+exampleList transpose println
+
+fileName := "twoDList.txt"
+exampleList write(fileName)
+listCopy := TwoDimensionalList read(fileName)
+"copied" println
+listCopy println
